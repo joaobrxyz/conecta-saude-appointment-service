@@ -1,5 +1,6 @@
 package com.example.appointment_service.model;
 
+import com.example.appointment_service.dto.AppointmentRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,4 +37,11 @@ public class Appointment {
 
     @Column(name = "motivo_cancelamento")
     private String motivoCancelamento;
+
+    public void agendar(AppointmentRequestDTO request) {
+        this.doctorId = request.doctorId();
+        this.patientId = request.patientId();
+        this.dataHoraConsulta = request.dataHoraConsulta();
+        this.status = StatusConsulta.AGENDADA;
+    }
 }
