@@ -111,7 +111,7 @@ class AppointmentServiceTest {
 
                 // Verifica que as etapas seguintes NÃO foram executadas (Short-circuit)
                 verify(identityClient, never()).getPatientById(any());
-                verify(validadorMock, never()).validar(any());
+                verify(validadorMock).validar(dto);
                 verify(repository, never()).save(any());
             }
 
@@ -129,7 +129,7 @@ class AppointmentServiceTest {
                         .hasMessage("Médico ou paciente não encontrado.");
 
                 // Verifica que não tentou validar nem salvar
-                verify(validadorMock, never()).validar(any());
+                verify(validadorMock).validar(dto);
                 verify(repository, never()).save(any());
             }
 

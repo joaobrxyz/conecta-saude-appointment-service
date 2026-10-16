@@ -51,10 +51,10 @@ class ValidadorChoqueHorarioTest {
             void teste1() {
                 // Dado
                 var dto = criarRequestDTO();
-                when(repository.existsByDoctorIdAndDataHoraConsultaAndStatus(
-                        dto.doctorId(), dto.dataHoraConsulta(), StatusConsulta.AGENDADA)).thenReturn(false);
-                when(repository.existsByPatientIdAndDataHoraConsultaAndStatus(
-                        dto.patientId(), dto.dataHoraConsulta(), StatusConsulta.AGENDADA)).thenReturn(false);
+                when(repository.existsByDoctorIdAndDataHoraConsultaAndStatusIn(
+                        dto.doctorId(), dto.dataHoraConsulta(), java.util.List.of(StatusConsulta.AGENDADA, StatusConsulta.EM_ESPERA, StatusConsulta.EM_ATENDIMENTO))).thenReturn(false);
+                when(repository.existsByPatientIdAndDataHoraConsultaAndStatusIn(
+                        dto.patientId(), dto.dataHoraConsulta(), java.util.List.of(StatusConsulta.AGENDADA, StatusConsulta.EM_ESPERA, StatusConsulta.EM_ATENDIMENTO))).thenReturn(false);
 
                 // Quando / Então
                 // Usamos assertThatCode do AssertJ para garantir que nenhuma exceção seja lançada
@@ -71,8 +71,8 @@ class ValidadorChoqueHorarioTest {
             void teste1() {
                 // Dado
                 var dto = criarRequestDTO();
-                when(repository.existsByDoctorIdAndDataHoraConsultaAndStatus(
-                        dto.doctorId(), dto.dataHoraConsulta(), StatusConsulta.AGENDADA)).thenReturn(true);
+                when(repository.existsByDoctorIdAndDataHoraConsultaAndStatusIn(
+                        dto.doctorId(), dto.dataHoraConsulta(), java.util.List.of(StatusConsulta.AGENDADA, StatusConsulta.EM_ESPERA, StatusConsulta.EM_ATENDIMENTO))).thenReturn(true);
 
                 // Quando / Então
                 assertThatThrownBy(() -> validador.validar(dto))
@@ -80,7 +80,7 @@ class ValidadorChoqueHorarioTest {
                         .hasMessage("O médico já possui uma consulta agendada nesse horário.");
 
                 // Verifica se a validação parou no médico e nem chegou a bater no banco para checar o paciente
-                verify(repository, never()).existsByPatientIdAndDataHoraConsultaAndStatus(any(), any(), any());
+                verify(repository, never()).existsByPatientIdAndDataHoraConsultaAndStatusIn(any(), any(), any());
             }
 
             @DisplayName("Dado que o paciente já possui uma consulta no horário")
@@ -88,10 +88,10 @@ class ValidadorChoqueHorarioTest {
             void teste2() {
                 // Dado
                 var dto = criarRequestDTO();
-                when(repository.existsByDoctorIdAndDataHoraConsultaAndStatus(
-                        dto.doctorId(), dto.dataHoraConsulta(), StatusConsulta.AGENDADA)).thenReturn(false);
-                when(repository.existsByPatientIdAndDataHoraConsultaAndStatus(
-                        dto.patientId(), dto.dataHoraConsulta(), StatusConsulta.AGENDADA)).thenReturn(true);
+                when(repository.existsByDoctorIdAndDataHoraConsultaAndStatusIn(
+                        dto.doctorId(), dto.dataHoraConsulta(), java.util.List.of(StatusConsulta.AGENDADA, StatusConsulta.EM_ESPERA, StatusConsulta.EM_ATENDIMENTO))).thenReturn(false);
+                when(repository.existsByPatientIdAndDataHoraConsultaAndStatusIn(
+                        dto.patientId(), dto.dataHoraConsulta(), java.util.List.of(StatusConsulta.AGENDADA, StatusConsulta.EM_ESPERA, StatusConsulta.EM_ATENDIMENTO))).thenReturn(true);
 
                 // Quando / Então
                 assertThatThrownBy(() -> validador.validar(dto))

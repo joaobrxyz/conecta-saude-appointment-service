@@ -6,8 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
+    List<Appointment> findAllByOrderByDataHoraConsultaAsc();
+    List<Appointment> findAllByPatientIdOrderByDataHoraConsultaAsc(UUID patientId);
+    List<Appointment> findAllByDoctorIdOrderByDataHoraConsultaAsc(UUID doctorId);
+    boolean existsByDoctorIdAndDataHoraConsultaAndStatusIn(UUID doctorId, LocalDateTime date, List<StatusConsulta> statuses);
+    boolean existsByPatientIdAndDataHoraConsultaAndStatusIn(UUID patientId, LocalDateTime date, List<StatusConsulta> statuses);
     boolean existsByDoctorIdAndDataHoraConsultaAndStatus(
             UUID doctorId,
             LocalDateTime dataHoraConsulta,

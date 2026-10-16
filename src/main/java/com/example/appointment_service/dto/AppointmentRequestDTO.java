@@ -4,11 +4,12 @@ import com.example.appointment_service.model.Appointment;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import jakarta.validation.constraints.NotNull;
 
 public record AppointmentRequestDTO(
-        UUID doctorId,
-        UUID patientId,
-        LocalDateTime dataHoraConsulta
+        @NotNull UUID doctorId,
+        @NotNull UUID patientId,
+        @NotNull LocalDateTime dataHoraConsulta
 ) {
     public AppointmentRequestDTO(Appointment appointment) {
         this(
