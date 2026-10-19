@@ -2,7 +2,10 @@ package com.example.appointment_service.repository;
 
 import com.example.appointment_service.model.Appointment;
 import com.example.appointment_service.model.StatusConsulta;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,4 +28,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             LocalDateTime dataHoraConsulta,
             StatusConsulta status
     );
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Appointment a SET a.status = 'NAO_COMPARECEU' WHERE a.status = 'AGENDADA' AND a.dataHoraConsulta < :inicioDeHoje")
+    int markPastAppointmentsAsNoShow(LocalDateTime inicioDeHoje);
 }
